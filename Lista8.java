@@ -191,14 +191,11 @@ class Fila {
 
     private Celula inicio;
     private Celula fim;
-    private int totalElementos;
-    private double somaNota;
+    private float somaNota;
 
     public Fila() {
         inicio = null;
         fim = null;
-        totalElementos = 0;
-        somaNota = 0.0;
     }
 
     public void enfileirar(Livro livro) {
@@ -211,13 +208,12 @@ class Fila {
             fim = nova;
         }
 
-        totalElementos++;
         somaNota += livro.getNota_avaliacao();
 
         MyIO.println((int)Math.round(somaNota));
     }
 
-    public Livro desenfileirar() {
+     Livro desenfileirar() {
         if (inicio == fim) {
             return null;
         }
@@ -229,7 +225,6 @@ class Fila {
             fim = null;
         }
 
-        totalElementos--;
         somaNota -= livro.getNota_avaliacao();
 
         return livro;
@@ -247,12 +242,21 @@ class Fila {
         }
     }
 
+    int obterSomaDaNotasMedia() {
+        somaNota = 0; 
+        for (Celula i = inicio; i != fim; i = i.prox) {
+            somaNota += i.livro.getNota_avaliacao();
+        }
+        return Math.round(somaNota);
+    }
+
     void acharLivro(String linha, Livro[] livros) {
         String[] info = linha.split(";");
 
         for (int j = 0; j < livros.length; j++) {
             if (livros[j].getTitulo().equals(info[0]) && livros[j].getAno_publicacao() == Integer.parseInt(info[1]) && livros[j].getAutor_principal().equals(info[2])) {
                 enfileirar(livros[j]);
+                MyIO.println(obterSomaDaNotasMedia());
                 break;
             }
         }
@@ -279,14 +283,6 @@ class Fila {
             }
             i++;
         }
-    }
-
-    int getSomaMedia() {
-        return (int) Math.round(somaNota);
-    }
-
-    int getQtdElementos() {
-        return totalElementos;
     }
 
 }
